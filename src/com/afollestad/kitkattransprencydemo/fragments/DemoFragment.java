@@ -39,6 +39,8 @@ public class DemoFragment extends Fragment {
             adapter.add("Trim to #" + i);
 
         ListView list = (ListView) view.findViewById(android.R.id.list);
+        //Add the padding to the listview.
+        list.setPadding(0, getActionBarHeight()+getStatusBarHeight(), 0,0);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -46,5 +48,25 @@ public class DemoFragment extends Fragment {
                 ((FragmentDemoActivity) getActivity()).setFragment(new DemoFragment(), mStartAt + position);
             }
         });
+    }
+   
+    public int getActionBarHeight(){
+        int actionBarHeight = 0;
+        TypedValue tv = new TypedValue();
+         // Checks if the os version has actionbar in it or not
+           if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+              if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+           }
+           return actionBarHeight;
+    }
+    
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 }
